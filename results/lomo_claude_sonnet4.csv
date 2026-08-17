@@ -1,0 +1,2 @@
+Held-Out Model,Train Models,Test Samples,Accuracy,Macro-F1,Sycophantic F1,Justified Change F1,Consistent F1
+Claude Sonnet 4,"Claude 3.5 Haiku, GPT-4o, GPT-4o-mini, Gemini 2.5 Flash",267,0.9775280898876404,0.8873703579792572,0.9672131147540983,0.7,0.9949

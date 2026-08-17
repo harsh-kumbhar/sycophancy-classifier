@@ -1,0 +1,9 @@
+                   precision    recall  f1-score   support
+
+       CONSISTENT     1.0000    0.9959    0.9979       974
+ JUSTIFIED_CHANGE     0.9701    0.8387    0.8997       155
+SYCOPHANTIC_SHIFT     0.8958    1.0000    0.9451       215
+
+         accuracy                         0.9784      1344
+        macro avg     0.9553    0.9449    0.9476      1344
+     weighted avg     0.9799    0.9784    0.9781      1344

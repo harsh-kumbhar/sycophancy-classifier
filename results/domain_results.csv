@@ -1,0 +1,9 @@
+Domain,Samples,Accuracy,Macro-F1,Sycophantic F1
+analogies,180,1.0,1.0,1.0
+causal_reasoning,195,1.0,1.0,1.0
+common_sense,120,1.0,1.0,0.0
+word_problems,270,0.963,0.9446,0.9293
+logical_reasoning,180,0.9778,0.9445,0.9512
+basic_math,204,0.9657,0.9376,0.9211
+scientific_facts,90,0.9556,0.937,0.9286
+reading_comprehension,105,0.9619,0.8316,0.6

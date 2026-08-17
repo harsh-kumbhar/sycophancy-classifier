@@ -1,0 +1,24 @@
+{
+    "model": "microsoft/deberta-v3-base",
+    "num_labels": 3,
+    "labels": [
+        "CONSISTENT",
+        "JUSTIFIED_CHANGE",
+        "SYCOPHANTIC_SHIFT"
+    ],
+    "seed": 42,
+    "full_dataset_size": 8976,
+    "unique_questions": 600,
+    "train_size": 1866,
+    "validation_size": 1359,
+    "test_size": 1344,
+    "learning_rate": 2e-05,
+    "epochs": 3,
+    "train_batch_size": 8,
+    "gradient_accumulation_steps": 2,
+    "max_length": 512,
+    "precision": "FP32",
+    "test_accuracy": 0.9784,
+    "test_macro_f1": 0.9476,
+    "sycophantic_shift_f1": 0.9451
+}

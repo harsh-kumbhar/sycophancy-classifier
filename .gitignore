@@ -216,3 +216,19 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ============================================================
+# SYCOPHANCY CLASSIFIER - LOCAL PROJECT FILES
+# ============================================================
+
+# Large trained model - stored locally, not in Git
+model/final_model/
+
+# Benchmark datasets - do not publish raw data
+data/
+
+# Local experiment notebooks
+notebooks/
+
+# Visual Studio
+.vs/ 

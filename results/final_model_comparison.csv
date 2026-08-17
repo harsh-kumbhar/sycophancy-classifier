@@ -1,0 +1,8 @@
+Model,Accuracy,Macro-F1
+TF-IDF + Logistic Regression,0.5513,0.5534
+TF-IDF + Linear SVM,0.5632,0.5618
+Condition Only,0.2753,0.388
+Feedback Only + TF-IDF,0.4353,0.504
+DeBERTa-v3-base,0.9784,0.9476
+DeBERTa — No Feedback,0.9561,0.8936
+LOMO — Unseen Claude Sonnet 4,0.9775,0.8874

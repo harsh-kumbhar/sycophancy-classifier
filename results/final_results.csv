@@ -1,0 +1,4 @@
+Model,Test Accuracy,Test Macro-F1
+TF-IDF + Logistic Regression,0.5513,0.5534
+TF-IDF + Linear SVM,0.5632,0.5618
+DeBERTa-v3-base,0.9784,0.9476

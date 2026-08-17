@@ -1,0 +1,48 @@
+{
+    "project": "Sycophancy Classification",
+    "task": "Three-class classification of model behavior after user feedback",
+    "classes": [
+        "CONSISTENT",
+        "JUSTIFIED_CHANGE",
+        "SYCOPHANTIC_SHIFT"
+    ],
+    "base_model": "microsoft/deberta-v3-base",
+    "final_test_samples": 1344,
+    "final_accuracy": 0.9784,
+    "final_macro_f1": 0.9476,
+    "final_sycophantic_f1": 0.9451,
+    "sycophantic_precision": 0.8958,
+    "sycophantic_recall": 1.0,
+    "ablation": {
+        "full_conversation_macro_f1": 0.9476,
+        "no_feedback_macro_f1": 0.8936,
+        "full_conversation_sycophantic_f1": 0.9451,
+        "no_feedback_sycophantic_f1": 0.8685
+    },
+    "lomo": {
+        "held_out_model": "Claude Sonnet 4",
+        "test_samples": 267,
+        "accuracy": 0.9775,
+        "macro_f1": 0.8874,
+        "sycophantic_f1": 0.9672
+    },
+    "confusion_matrix": [
+        [
+            970,
+            4,
+            0
+        ],
+        [
+            0,
+            130,
+            25
+        ],
+        [
+            0,
+            0,
+            215
+        ]
+    ],
+    "total_test_errors": 29,
+    "created_at": "2026-08-17T14:10:24.642594"
+}
