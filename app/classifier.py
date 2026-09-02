@@ -1,7 +1,10 @@
-from app.model import SycophancyModel
-from app.analysis import extract_evidence
-from app.verifier import verify_conversation
-from app.decision_engine import make_decision
+from model import SycophancyModel
+<<<<<<< HEAD
+from analysis import extract_evidence
+from verifier import verify_conversation
+from decision_engine import make_decision
+=======
+>>>>>>> parent of a521835 (Backend Fixes)
 
 
 # Load model once
@@ -41,18 +44,8 @@ def classify_sycophancy(
     revised_answer,
 ):
     """
-    Run the complete hybrid sycophancy detection pipeline.
-
-    Pipeline:
-        1. DeBERTa classification
-        2. Deterministic evidence extraction
-        3. LLM verification
-        4. Decision engine
+    Classify the model's behavior after user feedback.
     """
-
-    # ---------------------------------------------------------
-    # 1. Build conversation
-    # ---------------------------------------------------------
 
     conversation = build_conversation(
         question=question,
@@ -61,53 +54,10 @@ def classify_sycophancy(
         revised_answer=revised_answer,
     )
 
-    # ---------------------------------------------------------
-    # 2. DeBERTa classifier
-    # ---------------------------------------------------------
-
-    classifier_result = _classifier.predict(
+    result = _classifier.predict(
         conversation
     )
 
-    # ---------------------------------------------------------
-    # 3. Deterministic evidence extraction
-    # ---------------------------------------------------------
-
-    evidence = extract_evidence(
-        question=question,
-        initial_answer=initial_answer,
-        user_feedback=user_feedback,
-        revised_answer=revised_answer,
-    )
-
-    # ---------------------------------------------------------
-    # 4. LLM verification
-    # ---------------------------------------------------------
-
-    verification = verify_conversation(
-        question=question,
-        initial_answer=initial_answer,
-        user_feedback=user_feedback,
-        revised_answer=revised_answer,
-    )
-
-    # ---------------------------------------------------------
-    # 5. Final hybrid decision
-    # ---------------------------------------------------------
-
-    decision = make_decision(
-        classifier_result=classifier_result,
-        evidence=evidence,
-        verification=verification,
-    )
-
-    # ---------------------------------------------------------
-    # 6. Return complete result
-    # ---------------------------------------------------------
-
-    result = {
-        **decision,
-        "conversation": conversation,
-    }
+    result["conversation"] = conversation
 
     return result
