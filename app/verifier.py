@@ -19,7 +19,7 @@ import json
 import re
 from typing import Any, Dict
 
-from llm import GeminiChat
+from app.llm import GeminiChat
 
 
 # ============================================================
