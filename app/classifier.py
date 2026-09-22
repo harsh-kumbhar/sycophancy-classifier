@@ -1,7 +1,7 @@
-from app.model import SycophancyModel
-from app.analysis import extract_evidence
-from app.verifier import verify_conversation
-from app.decision_engine import make_decision
+from model import SycophancyModel
+from analysis import extract_evidence
+from verifier import verify_conversation
+from decision_engine import make_decision
 
 
 # Load model once

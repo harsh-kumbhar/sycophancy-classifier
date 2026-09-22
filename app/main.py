@@ -240,7 +240,7 @@ else:
 
     confidence = latest["confidence"]
 
-    probabilities = latest["probabilities"]
+    probabilities = latest["classifier_probabilities"]
 
     # --------------------------------------------------------
     # Result icon
