@@ -1,9 +1,9 @@
 import streamlit as st
 from dotenv import load_dotenv
 
-from llm import GeminiChat
+from llm import GroqChat
 from classifier import classify_sycophancy
-from feedback_detector import detect_feedback
+from feedback_detector import analyze_feedback
 from evaluation_mode import render_evaluation_mode
 
 
@@ -26,19 +26,20 @@ st.set_page_config(
 
 
 # ============================================================
-# LOAD GEMINI
+# LOAD GROQ
 # ============================================================
 
 @st.cache_resource
-def load_gemini():
-    return GeminiChat()
+def load_llm():
+    return GroqChat()
 
 
 try:
-    gemini = load_gemini()
+    llm = load_llm()
 
 except Exception as e:
-    st.error("Failed to initialize Gemini API.")
+
+    st.error("Failed to initialize Groq API.")
     st.exception(e)
     st.stop()
 
@@ -52,6 +53,30 @@ if "messages" not in st.session_state:
 
 if "analyses" not in st.session_state:
     st.session_state.analyses = []
+
+# ------------------------------------------------------------
+# Current analysis thread
+#
+# These remain stable across multiple rounds of feedback.
+#
+# Example:
+#
+# Question
+#    ↓
+# Initial Answer
+#    ↓
+# Feedback 1 → Revised Answer 1
+#    ↓
+# Feedback 2 → Revised Answer 2
+#    ↓
+# Feedback 3 → Revised Answer 3
+# ------------------------------------------------------------
+
+if "current_question" not in st.session_state:
+    st.session_state.current_question = None
+
+if "current_answer" not in st.session_state:
+    st.session_state.current_answer = None
 
 
 # ============================================================
@@ -136,8 +161,8 @@ with st.sidebar:
         if total_analyses > 0:
 
             sycophancy_rate = (
-                sycophantic_count /
-                total_analyses
+                sycophantic_count
+                / total_analyses
             ) * 100
 
         else:
@@ -159,6 +184,10 @@ with st.sidebar:
             st.session_state.messages = []
             st.session_state.analyses = []
 
+            # Reset the active analysis thread.
+            st.session_state.current_question = None
+            st.session_state.current_answer = None
+
             st.rerun()
 
 
@@ -171,7 +200,7 @@ if mode == "💬 Live Chat":
     st.title("💬 Live Chat")
 
     st.caption(
-        "Chat with Gemini and analyze how its responses "
+        "Chat with the LLM and analyze how its responses "
         "change after user feedback."
     )
 
@@ -224,6 +253,7 @@ st.divider()
 
 st.subheader("Latest Analysis")
 
+
 if not st.session_state.analyses:
 
     st.info(
@@ -240,7 +270,9 @@ else:
 
     confidence = latest["confidence"]
 
-    probabilities = latest["classifier_probabilities"]
+    probabilities = latest[
+        "classifier_probabilities"
+    ]
 
     # --------------------------------------------------------
     # Result icon
@@ -266,13 +298,47 @@ else:
         text=f"Confidence: {confidence:.2%}",
     )
 
-    st.write("Class probabilities")
+    st.write(
+        "Class probabilities"
+    )
 
     for label, probability in probabilities.items():
 
         st.write(
-            f"**{label}**: {probability:.2%}"
+            f"**{label}**: "
+            f"{probability:.2%}"
         )
+
+    # --------------------------------------------------------
+    # Feedback detection information
+    # --------------------------------------------------------
+
+    if "feedback_type" in latest:
+
+        st.divider()
+
+        st.write(
+            "**Feedback Detection**"
+        )
+
+        st.write(
+            f"Type: `{latest['feedback_type']}`"
+        )
+
+        st.write(
+            f"Confidence: "
+            f"{latest['feedback_confidence']:.2%}"
+        )
+
+        st.write(
+            f"Detector: `{latest['feedback_detector']}`"
+        )
+
+        if latest.get("feedback_reason"):
+
+            st.caption(
+                latest["feedback_reason"]
+            )
 
 
 # ============================================================
@@ -284,56 +350,87 @@ user_input = st.chat_input(
 )
 
 
+# ============================================================
+# PROCESS USER MESSAGE
+# ============================================================
+
 if user_input:
 
-    # --------------------------------------------------------
-    # Detect whether this is feedback
-    # --------------------------------------------------------
+    # ========================================================
+    # 1. DETERMINE WHETHER THIS IS FEEDBACK
+    # ========================================================
+    #
+    # IMPORTANT:
+    #
+    # We no longer call:
+    #
+    #     detect_feedback(user_input)
+    #
+    # because that has no context.
+    #
+    # Instead, the detector receives:
+    #
+    #     current message
+    #     previous assistant answer
+    #     original question
+    #
+    # This allows cases such as:
+    #
+    #     Assistant: Ink.
+    #     User: Paper
+    #
+    # to be detected as feedback.
+    # ========================================================
 
-    is_feedback = detect_feedback(
-        user_input
+    feedback_result = analyze_feedback(
+        message=user_input,
+
+        previous_assistant_response=(
+            st.session_state.current_answer
+            or ""
+        ),
+
+        original_question=(
+            st.session_state.current_question
+            or ""
+        ),
+
+        use_semantic_fallback=True,
     )
 
-    # --------------------------------------------------------
-    # Identify previous question + answer
-    # --------------------------------------------------------
+    is_feedback = feedback_result[
+        "is_feedback"
+    ]
 
-    previous_user = None
 
-    previous_assistant = None
+    # ========================================================
+    # 2. START A NEW QUESTION IF THIS IS NOT FEEDBACK
+    # ========================================================
+    #
+    # If the user is not responding to the current answer,
+    # treat this as a new question/conversation thread.
+    #
+    # Example:
+    #
+    #     Previous topic: analogy
+    #
+    #     User: What is Python?
+    #
+    # This starts a new analysis thread.
+    # ========================================================
 
-    if (
-        is_feedback
-        and len(st.session_state.messages) >= 2
-    ):
+    if not is_feedback:
 
-        # The previous message must be the assistant's
-        # response.
+        st.session_state.current_question = (
+            user_input
+        )
 
-        if (
-            st.session_state.messages[-1]["role"]
-            == "assistant"
-        ):
+        st.session_state.current_answer = None
 
-            previous_assistant = (
-                st.session_state.messages[-1]["content"]
-            )
 
-            # The message before that must be the
-            # corresponding user question.
-
-            if (
-                st.session_state.messages[-2]["role"]
-                == "user"
-            ):
-
-                previous_user = (
-                    st.session_state.messages[-2]["content"]
-                )
-
-    # --------------------------------------------------------
-    # Add user message
-    # --------------------------------------------------------
+    # ========================================================
+    # 3. ADD USER MESSAGE TO CHAT
+    # ========================================================
 
     st.session_state.messages.append(
         {
@@ -348,9 +445,10 @@ if user_input:
             user_input
         )
 
-    # --------------------------------------------------------
-    # Generate Gemini response
-    # --------------------------------------------------------
+
+    # ========================================================
+    # 4. GENERATE GROQ RESPONSE
+    # ========================================================
 
     with st.chat_message("assistant"):
 
@@ -361,7 +459,7 @@ if user_input:
             try:
 
                 response = (
-                    gemini.generate_response(
+                    llm.generate_response(
                         st.session_state.messages
                     )
                 )
@@ -369,7 +467,7 @@ if user_input:
             except Exception as e:
 
                 st.error(
-                    "Failed to generate Gemini response."
+                    "Failed to generate Groq response."
                 )
 
                 st.exception(e)
@@ -380,9 +478,10 @@ if user_input:
             response
         )
 
-    # --------------------------------------------------------
-    # Save assistant response
-    # --------------------------------------------------------
+
+    # ========================================================
+    # 5. SAVE ASSISTANT RESPONSE
+    # ========================================================
 
     st.session_state.messages.append(
         {
@@ -391,14 +490,41 @@ if user_input:
         }
     )
 
-    # --------------------------------------------------------
-    # CLASSIFY ONLY IF FEEDBACK WAS DETECTED
-    # --------------------------------------------------------
+
+    # ========================================================
+    # 6. CLASSIFY FEEDBACK
+    # ========================================================
+    #
+    # The important point here is:
+    #
+    #     current_question
+    #
+    # remains the ORIGINAL question.
+    #
+    #     current_answer
+    #
+    # is the answer immediately being challenged.
+    #
+    # Therefore:
+    #
+    # Question
+    #    ↓
+    # Answer 1
+    #    ↓
+    # Feedback 1
+    #    ↓
+    # Answer 2
+    #    ↓
+    # Feedback 2
+    #
+    # Both feedback events remain tied to the same
+    # original question.
+    # ========================================================
 
     if (
         is_feedback
-        and previous_user is not None
-        and previous_assistant is not None
+        and st.session_state.current_question
+        and st.session_state.current_answer
     ):
 
         with st.spinner(
@@ -408,17 +534,79 @@ if user_input:
             try:
 
                 result = classify_sycophancy(
-                    question=previous_user,
-                    initial_answer=previous_assistant,
+
+                    question=(
+                        st.session_state.current_question
+                    ),
+
+                    initial_answer=(
+                        st.session_state.current_answer
+                    ),
+
                     user_feedback=user_input,
+
                     revised_answer=response,
                 )
+
+
+                # ====================================================
+                # STORE FEEDBACK DETECTION METADATA
+                # ====================================================
+
+                result["feedback_type"] = (
+                    feedback_result[
+                        "feedback_type"
+                    ]
+                )
+
+                result["feedback_confidence"] = (
+                    feedback_result[
+                        "confidence"
+                    ]
+                )
+
+                result["feedback_detector"] = (
+                    feedback_result[
+                        "detector"
+                    ]
+                )
+
+                result["feedback_reason"] = (
+                    feedback_result[
+                        "reason"
+                    ]
+                )
+
+                result["feedback_candidate"] = (
+                    feedback_result.get(
+                        "candidate_answer"
+                    )
+                )
+
+
+                # ====================================================
+                # STORE ANALYSIS
+                # ====================================================
 
                 st.session_state.analyses.append(
                     result
                 )
 
+
+                # ====================================================
+                # IMPORTANT:
+                #
+                # The newly generated answer becomes the answer
+                # that the NEXT feedback event will challenge.
+                # ====================================================
+
+                st.session_state.current_answer = (
+                    response
+                )
+
+
                 st.rerun()
+
 
             except Exception as e:
 
@@ -427,6 +615,26 @@ if user_input:
                 )
 
                 st.exception(e)
+
+
+    # ========================================================
+    # 7. FIRST ANSWER / NORMAL MESSAGE
+    # ========================================================
+    #
+    # If this was a normal user question, the generated
+    # response becomes the first answer in the new thread.
+    # ========================================================
+
+    elif not is_feedback:
+
+        st.session_state.current_answer = (
+            response
+        )
+
+
+    # ========================================================
+    # 8. FEEDBACK WITHOUT A COMPLETE ACTIVE THREAD
+    # ========================================================
 
     elif is_feedback:
 

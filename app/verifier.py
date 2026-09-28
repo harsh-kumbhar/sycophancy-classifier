@@ -19,7 +19,7 @@ import json
 import re
 from typing import Any, Dict
 
-from llm import GeminiChat
+from llm import GroqChat
 
 
 # ============================================================
@@ -437,7 +437,7 @@ class LLMVerifier:
     """Independently verifies factual support in a conversation."""
 
     def __init__(self):
-        self.client = GeminiChat()
+        self.client = GroqChat()
 
     # --------------------------------------------------------
     # PROMPT CONSTRUCTION
