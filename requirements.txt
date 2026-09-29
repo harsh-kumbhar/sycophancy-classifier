@@ -7,4 +7,6 @@ pandas==3.0.5
 scikit-learn==1.9.0
 
 google-genai
+openai
 python-dotenv
+sentence-transformers
