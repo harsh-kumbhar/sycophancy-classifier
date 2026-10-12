@@ -1,0 +1,99 @@
+﻿sycophancy-classifier\
+|-- .vs\
+|   |-- sycophancy-classifier.slnx\
+|   |   |-- config\
+|   |   |   \-- applicationhost.config
+|   |   |-- FileContentIndex\
+|   |   |   |-- 1241ed7a-6e67-4f14-aa86-b37b2f5ea192.vsidx
+|   |   |   |-- 132cf969-2611-4661-94ca-255031bf3900.vsidx
+|   |   |   |-- 52db4686-00b4-4e3a-aeed-35a22fe86a07.vsidx
+|   |   |   |-- 5b0c8435-586c-4d88-9b94-3f3b2898f4df.vsidx
+|   |   |   |-- aa1abafa-5023-4071-8869-a40864ad4539.vsidx
+|   |   |   \-- dbbadd01-036c-434b-8240-b434c53b3df5.vsidx
+|   |   \-- v18\
+|   |       |-- .wsuo
+|   |       |-- DocumentLayout.backup.json
+|   |       \-- DocumentLayout.json
+|   |-- slnx.sqlite
+|   |-- tasks.vs.json
+|   \-- VSWorkspaceState.json
+|-- app\
+|   |-- adversarial_tests.py
+|   |-- analysis.py
+|   |-- classifier.py
+|   |-- controlled_tests.py
+|   |-- controlled_tests_v2.py
+|   |-- decision_engine.py
+|   |-- evaluate_hybrid.py
+|   |-- evaluate_production_baseline.py
+|   |-- evaluation_mode.py
+|   |-- feedback_detector.py
+|   |-- llm.py
+|   |-- main.py
+|   |-- model.py
+|   |-- test_adversarial.py
+|   |-- test_analysis.py
+|   |-- test_classifier.py
+|   |-- test_decision_engine.py
+|   |-- test_evaluation_mode.py
+|   |-- test_feedback_detector.py
+|   |-- test_llm.py
+|   |-- test_model.py
+|   |-- test_verifier.py
+|   \-- verifier.py
+|-- backend\
+|   |-- api.py
+|   \-- requirements-api.txt
+|-- data\
+|-- frontend\
+|   |-- src\
+|   |   |-- main.jsx
+|   |   \-- style.css
+|   |-- index.html
+|   |-- package.json
+|   |-- package-lock.json
+|   \-- README.md
+|-- model\
+|   |-- final_model\
+|   \-- final_model_old\
+|-- notebooks\
+|-- results\
+|   |-- ablation_results.csv
+|   |-- ablation_study.png
+|   |-- augmented_confusion_matrix.png
+|   |-- augmented_domain_performance.png
+|   |-- augmented_domain_results.csv
+|   |-- augmented_test_classification_report.csv
+|   |-- augmented_test_confusion_matrix.csv
+|   |-- deberta_classification_report.txt
+|   |-- deberta_confusion_matrix.csv
+|   |-- deberta_confusion_matrix.png
+|   |-- deberta_test_predictions.csv
+|   |-- domain_performance.png
+|   |-- domain_results.csv
+|   |-- experiment_metadata.json
+|   |-- experiment_results.json
+|   |-- final_experiment_metadata.json
+|   |-- final_model_comparison.csv
+|   |-- final_results.csv
+|   |-- lomo_claude_sonnet4.csv
+|   |-- MASTER_RESULTS.csv
+|   |-- model_comparison.png
+|   |-- per_class_f1.png
+|   \-- per_class_results.csv
+|-- scripts\
+|   |-- data\
+|   |   \-- build_augmented_dataset.py
+|   \-- synthetic\
+|       |-- generate.py
+|       |-- prompts.py
+|       |-- synthetic_config.py
+|       |-- test_all_labels.py
+|       |-- test_gemini.py
+|       |-- test_generation.py
+|       \-- validate.py
+|-- tests\
+|-- .env
+|-- .env.example
+|-- .gitignore
+\-- requirements.txt
