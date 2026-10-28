@@ -4,7 +4,7 @@ from verifier import verify_conversation
 from decision_engine import make_decision
 
 
-# Load model once
+# Load the classifier once when this module is imported.
 _classifier = SycophancyModel()
 
 
@@ -14,12 +14,8 @@ def build_conversation(
     user_feedback,
     revised_answer,
 ):
-    """
-    Construct the conversation in the same
-    format used during model training.
-    """
-
-    conversation = f"""USER:
+    """Construct the conversation in the format used during model training."""
+    return f"""USER:
 {question}
 
 ASSISTANT (INITIAL RESPONSE):
@@ -31,8 +27,6 @@ USER (FOLLOW-UP / FEEDBACK):
 ASSISTANT (REVISED RESPONSE):
 {revised_answer}"""
 
-    return conversation
-
 
 def classify_sycophancy(
     question,
@@ -41,19 +35,14 @@ def classify_sycophancy(
     revised_answer,
 ):
     """
-    Run the complete hybrid sycophancy detection pipeline.
+    Run the hybrid sycophancy detection pipeline.
 
-    Pipeline:
-        1. DeBERTa classification
-        2. Deterministic evidence extraction
-        3. LLM verification
-        4. Decision engine
+    If LLM verification fails, return the DeBERTa prediction as an
+    explicitly unverified fallback. Errors from the classifier and evidence
+    extractor are intentionally not swallowed by the verifier fallback.
     """
 
-    # ---------------------------------------------------------
-    # 1. Build conversation
-    # ---------------------------------------------------------
-
+    # 1. Build the conversation.
     conversation = build_conversation(
         question=question,
         initial_answer=initial_answer,
@@ -61,18 +50,10 @@ def classify_sycophancy(
         revised_answer=revised_answer,
     )
 
-    # ---------------------------------------------------------
-    # 2. DeBERTa classifier
-    # ---------------------------------------------------------
+    # 2. Run DeBERTa classification.
+    classifier_result = _classifier.predict(conversation)
 
-    classifier_result = _classifier.predict(
-        conversation
-    )
-
-    # ---------------------------------------------------------
-    # 3. Deterministic evidence extraction
-    # ---------------------------------------------------------
-
+    # 3. Extract deterministic evidence.
     evidence = extract_evidence(
         question=question,
         initial_answer=initial_answer,
@@ -80,34 +61,41 @@ def classify_sycophancy(
         revised_answer=revised_answer,
     )
 
-    # ---------------------------------------------------------
-    # 4. LLM verification
-    # ---------------------------------------------------------
+    # 4. Verify with the LLM, then make the normal hybrid decision.
+    try:
+        verification = verify_conversation(
+            question=question,
+            initial_answer=initial_answer,
+            user_feedback=user_feedback,
+            revised_answer=revised_answer,
+        )
+    except Exception as exc:
+        # Keep analysis available if Groq/verifier is unavailable.
+        print(f"[Verifier unavailable; using DeBERTa fallback] {exc}")
 
-    verification = verify_conversation(
-        question=question,
-        initial_answer=initial_answer,
-        user_feedback=user_feedback,
-        revised_answer=revised_answer,
-    )
+        decision = {
+            "prediction": classifier_result["prediction"],
+            "confidence": classifier_result["confidence"],
+            "decision_source": "DEBERTA_FALLBACK_VERIFIER_UNAVAILABLE",
+            "decision_reason": (
+                "LLM verification was unavailable. "
+                "This prediction is based on DeBERTa only and is unverified."
+            ),
+            "classifier_prediction": classifier_result["prediction"],
+            "classifier_confidence": classifier_result["confidence"],
+            "classifier_probabilities": classifier_result.get("probabilities", {}),
+            "verification": None,
+            "evidence": evidence,
+        }
+    else:
+        decision = make_decision(
+            classifier_result=classifier_result,
+            evidence=evidence,
+            verification=verification,
+        )
 
-    # ---------------------------------------------------------
-    # 5. Final hybrid decision
-    # ---------------------------------------------------------
-
-    decision = make_decision(
-        classifier_result=classifier_result,
-        evidence=evidence,
-        verification=verification,
-    )
-
-    # ---------------------------------------------------------
-    # 6. Return complete result
-    # ---------------------------------------------------------
-
-    result = {
+    # 5. Return the result in the existing response shape.
+    return {
         **decision,
         "conversation": conversation,
     }
-
-    return result

@@ -1,99 +1,102 @@
-﻿sycophancy-classifier\
-|-- .vs\
-|   |-- sycophancy-classifier.slnx\
-|   |   |-- config\
-|   |   |   \-- applicationhost.config
-|   |   |-- FileContentIndex\
-|   |   |   |-- 1241ed7a-6e67-4f14-aa86-b37b2f5ea192.vsidx
-|   |   |   |-- 132cf969-2611-4661-94ca-255031bf3900.vsidx
-|   |   |   |-- 52db4686-00b4-4e3a-aeed-35a22fe86a07.vsidx
-|   |   |   |-- 5b0c8435-586c-4d88-9b94-3f3b2898f4df.vsidx
-|   |   |   |-- aa1abafa-5023-4071-8869-a40864ad4539.vsidx
-|   |   |   \-- dbbadd01-036c-434b-8240-b434c53b3df5.vsidx
-|   |   \-- v18\
-|   |       |-- .wsuo
-|   |       |-- DocumentLayout.backup.json
-|   |       \-- DocumentLayout.json
-|   |-- slnx.sqlite
-|   |-- tasks.vs.json
-|   \-- VSWorkspaceState.json
-|-- app\
-|   |-- adversarial_tests.py
-|   |-- analysis.py
-|   |-- classifier.py
-|   |-- controlled_tests.py
-|   |-- controlled_tests_v2.py
-|   |-- decision_engine.py
-|   |-- evaluate_hybrid.py
-|   |-- evaluate_production_baseline.py
-|   |-- evaluation_mode.py
-|   |-- feedback_detector.py
-|   |-- llm.py
-|   |-- main.py
-|   |-- model.py
-|   |-- test_adversarial.py
-|   |-- test_analysis.py
-|   |-- test_classifier.py
-|   |-- test_decision_engine.py
-|   |-- test_evaluation_mode.py
-|   |-- test_feedback_detector.py
-|   |-- test_llm.py
-|   |-- test_model.py
-|   |-- test_verifier.py
-|   \-- verifier.py
-|-- backend\
-|   |-- api.py
-|   \-- requirements-api.txt
-|-- data\
-|-- frontend\
-|   |-- src\
-|   |   |-- main.jsx
-|   |   \-- style.css
-|   |-- index.html
-|   |-- package.json
-|   |-- package-lock.json
-|   \-- README.md
-|-- model\
-|   |-- final_model\
-|   \-- final_model_old\
-|-- notebooks\
-|-- results\
-|   |-- ablation_results.csv
-|   |-- ablation_study.png
-|   |-- augmented_confusion_matrix.png
-|   |-- augmented_domain_performance.png
-|   |-- augmented_domain_results.csv
-|   |-- augmented_test_classification_report.csv
-|   |-- augmented_test_confusion_matrix.csv
-|   |-- deberta_classification_report.txt
-|   |-- deberta_confusion_matrix.csv
-|   |-- deberta_confusion_matrix.png
-|   |-- deberta_test_predictions.csv
-|   |-- domain_performance.png
-|   |-- domain_results.csv
-|   |-- experiment_metadata.json
-|   |-- experiment_results.json
-|   |-- final_experiment_metadata.json
-|   |-- final_model_comparison.csv
-|   |-- final_results.csv
-|   |-- lomo_claude_sonnet4.csv
-|   |-- MASTER_RESULTS.csv
-|   |-- model_comparison.png
-|   |-- per_class_f1.png
-|   \-- per_class_results.csv
-|-- scripts\
-|   |-- data\
-|   |   \-- build_augmented_dataset.py
-|   \-- synthetic\
-|       |-- generate.py
-|       |-- prompts.py
-|       |-- synthetic_config.py
-|       |-- test_all_labels.py
-|       |-- test_gemini.py
-|       |-- test_generation.py
-|       \-- validate.py
-|-- tests\
-|-- .env
-|-- .env.example
-|-- .gitignore
-\-- requirements.txt
+C:\Users\HP\source\repos\sycophancy-classifier
+    .env.example
+    .gitignore
+    generate_structure.py
+    requirements.txt
+        .vs\VSWorkspaceState.json
+        .vs\slnx.sqlite
+        .vs\tasks.vs.json
+                .vs\sycophancy-classifier.slnx\FileContentIndex\31769b45-81a8-42f1-96d9-53df64c7c195.vsidx
+                .vs\sycophancy-classifier.slnx\FileContentIndex\52db4686-00b4-4e3a-aeed-35a22fe86a07.vsidx
+                .vs\sycophancy-classifier.slnx\FileContentIndex\a348a8e8-5ba7-441e-8b84-67a68b498530.vsidx
+                .vs\sycophancy-classifier.slnx\FileContentIndex\dbbadd01-036c-434b-8240-b434c53b3df5.vsidx
+                .vs\sycophancy-classifier.slnx\FileContentIndex\e6053454-6f25-4357-a2ca-349c22fe42c0.vsidx
+                .vs\sycophancy-classifier.slnx\FileContentIndex\f79241ad-1e7d-42d1-9bc7-d9e8932a2bfa.vsidx
+                .vs\sycophancy-classifier.slnx\config\applicationhost.config
+                .vs\sycophancy-classifier.slnx\v18\.wsuo
+                .vs\sycophancy-classifier.slnx\v18\DocumentLayout.backup.json
+                .vs\sycophancy-classifier.slnx\v18\DocumentLayout.json
+        app\adversarial_tests.py
+        app\analysis.py
+        app\classifier.py
+        app\controlled_tests.py
+        app\controlled_tests_v2.py
+        app\decision_engine.py
+        app\evaluate_hybrid.py
+        app\evaluate_production_baseline.py
+        app\evaluation_mode.py
+        app\feedback_detector.py
+        app\llm.py
+        app\main.py
+        app\model.py
+        app\test_adversarial.py
+        app\test_analysis.py
+        app\test_classifier.py
+        app\test_decision_engine.py
+        app\test_evaluation_mode.py
+        app\test_feedback_detector.py
+        app\test_llm.py
+        app\test_model.py
+        app\test_verifier.py
+        app\verifier.py
+        backend\api.py
+        backend\requirements-api.txt
+        data\full_dataset.csv
+        data\hybrid_error_evaluation.csv
+        data\step5b_results.json
+        data\test.csv
+        data\train.csv
+        data\train_augmented.csv
+        data\validation.csv
+            data\adversarial\adversarial_results.json
+            data\evaluation\production_baseline.json
+            data\evaluation\production_baseline_predictions.csv
+            data\synthetic\generation_metadata.json
+                data\synthetic\raw\synthetic_raw.jsonl
+                data\synthetic\validated\synthetic_validated.jsonl
+        frontend\README.md
+        frontend\index.html
+        frontend\package-lock.json
+        frontend\package.json
+            frontend\src\main.jsx
+            frontend\src\style.css
+            model\final_model\config.json
+            model\final_model\model.safetensors
+            model\final_model\tokenizer.json
+            model\final_model\tokenizer_config.json
+            model\final_model\training_args.bin
+            model\final_model_old\config.json
+            model\final_model_old\model.safetensors
+            model\final_model_old\tokenizer.json
+            model\final_model_old\tokenizer_config.json
+        results\MASTER_RESULTS.csv
+        results\ablation_results.csv
+        results\ablation_study.png
+        results\augmented_confusion_matrix.png
+        results\augmented_domain_performance.png
+        results\augmented_domain_results.csv
+        results\augmented_test_classification_report.csv
+        results\augmented_test_confusion_matrix.csv
+        results\deberta_classification_report.txt
+        results\deberta_confusion_matrix.csv
+        results\deberta_confusion_matrix.png
+        results\deberta_test_predictions.csv
+        results\domain_performance.png
+        results\domain_results.csv
+        results\experiment_metadata.json
+        results\experiment_results.json
+        results\final_experiment_metadata.json
+        results\final_model_comparison.csv
+        results\final_results.csv
+        results\lomo_claude_sonnet4.csv
+        results\model_comparison.png
+        results\per_class_f1.png
+        results\per_class_results.csv
+            scripts\data\build_augmented_dataset.py
+            scripts\synthetic\generate.py
+            scripts\synthetic\prompts.py
+            scripts\synthetic\synthetic_config.py
+            scripts\synthetic\test_all_labels.py
+            scripts\synthetic\test_gemini.py
+            scripts\synthetic\test_generation.py
+            scripts\synthetic\validate.py

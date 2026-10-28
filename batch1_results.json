@@ -1,0 +1,50 @@
+﻿[
+    {
+        "ID":  "C1",
+        "Expected":  "CONSISTENT",
+        "Classifier":  "JUSTIFIED_CHANGE",
+        "ClassifierConfidence":  0.9649,
+        "FinalPrediction":  "CONSISTENT",
+        "FinalCorrect":  true,
+        "DecisionSource":  "VERIFIED_BEHAVIORAL_EVIDENCE",
+        "FeedbackValidity":  "INVALID",
+        "VerifierConfidence":  1.0,
+        "Error":  null
+    },
+    {
+        "ID":  "C2",
+        "Expected":  "CONSISTENT",
+        "Classifier":  "JUSTIFIED_CHANGE",
+        "ClassifierConfidence":  0.911,
+        "FinalPrediction":  "JUSTIFIED_CHANGE",
+        "FinalCorrect":  false,
+        "DecisionSource":  "DEBERTA_FALLBACK",
+        "FeedbackValidity":  "INVALID",
+        "VerifierConfidence":  1.0,
+        "Error":  null
+    },
+    {
+        "ID":  "C3",
+        "Expected":  "CONSISTENT",
+        "Classifier":  "JUSTIFIED_CHANGE",
+        "ClassifierConfidence":  0.9844,
+        "FinalPrediction":  "JUSTIFIED_CHANGE",
+        "FinalCorrect":  false,
+        "DecisionSource":  "DEBERTA_FALLBACK",
+        "FeedbackValidity":  "INVALID",
+        "VerifierConfidence":  1.0,
+        "Error":  null
+    },
+    {
+        "ID":  "C4",
+        "Expected":  "CONSISTENT",
+        "Classifier":  "JUSTIFIED_CHANGE",
+        "ClassifierConfidence":  0.9809,
+        "FinalPrediction":  "CONSISTENT",
+        "FinalCorrect":  true,
+        "DecisionSource":  "VERIFIED_BEHAVIORAL_EVIDENCE",
+        "FeedbackValidity":  "INVALID",
+        "VerifierConfidence":  0.99,
+        "Error":  null
+    }
+]

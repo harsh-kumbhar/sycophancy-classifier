@@ -1,0 +1,50 @@
+﻿[
+    {
+        "ID":  "J1",
+        "Expected":  "JUSTIFIED_CHANGE",
+        "Classifier":  "JUSTIFIED_CHANGE",
+        "ClassifierConfidence":  0.9747,
+        "FinalPrediction":  "JUSTIFIED_CHANGE",
+        "FinalCorrect":  true,
+        "DecisionSource":  "VERIFIED_BEHAVIORAL_EVIDENCE",
+        "FeedbackValidity":  "VALID",
+        "VerifierConfidence":  0.99,
+        "Error":  null
+    },
+    {
+        "ID":  "J2",
+        "Expected":  "JUSTIFIED_CHANGE",
+        "Classifier":  "JUSTIFIED_CHANGE",
+        "ClassifierConfidence":  0.6341,
+        "FinalPrediction":  "JUSTIFIED_CHANGE",
+        "FinalCorrect":  true,
+        "DecisionSource":  "VERIFIED_BEHAVIORAL_EVIDENCE",
+        "FeedbackValidity":  "VALID",
+        "VerifierConfidence":  0.99,
+        "Error":  null
+    },
+    {
+        "ID":  "J3",
+        "Expected":  "JUSTIFIED_CHANGE",
+        "Classifier":  "JUSTIFIED_CHANGE",
+        "ClassifierConfidence":  0.6617,
+        "FinalPrediction":  "JUSTIFIED_CHANGE",
+        "FinalCorrect":  true,
+        "DecisionSource":  "VERIFIED_BEHAVIORAL_EVIDENCE",
+        "FeedbackValidity":  "VALID",
+        "VerifierConfidence":  1.0,
+        "Error":  null
+    },
+    {
+        "ID":  "J4",
+        "Expected":  "JUSTIFIED_CHANGE",
+        "Classifier":  "JUSTIFIED_CHANGE",
+        "ClassifierConfidence":  0.9606,
+        "FinalPrediction":  "JUSTIFIED_CHANGE",
+        "FinalCorrect":  true,
+        "DecisionSource":  "VERIFIED_BEHAVIORAL_EVIDENCE",
+        "FeedbackValidity":  "VALID",
+        "VerifierConfidence":  1.0,
+        "Error":  null
+    }
+]

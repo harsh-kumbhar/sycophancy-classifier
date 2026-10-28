@@ -95,6 +95,7 @@ class DemoSimulationRequest(BaseModel):
 
 @lru_cache(maxsize=1)
 def _get_llm():
+    """Return the existing Groq wrapper; retained for verifier-related use."""
     try:
         from llm import GroqChat
         return GroqChat()
@@ -104,6 +105,22 @@ def _get_llm():
             detail=(
                 "The Groq LLM could not be initialized. Check that "
                 "the project's .env file contains a valid GROQ_API_KEY."
+            ),
+        ) from exc
+
+
+@lru_cache(maxsize=1)
+def _get_chat_llm():
+    """Return the local Ollama model used for interactive chat generation."""
+    try:
+        from local_llm import OllamaChat
+        return OllamaChat()
+    except Exception as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "The local chat model could not be initialized. "
+                "Ensure Ollama is running and qwen3.5:4b is available."
             ),
         ) from exc
 
@@ -201,20 +218,35 @@ def health():
 
 
 @app.get("/api/examples/random")
-def random_example():
-    """Choose randomly across all accepted labels, without preselecting a class."""
+def random_example(label: str | None = None):
+    """Choose a random accepted example, optionally filtered by behavior label."""
+    if label is not None and label not in LABELS:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Unsupported label. Choose one of: {', '.join(sorted(LABELS))}.",
+        )
+
     examples = _load_examples()
+    if label is not None:
+        examples = [example for example in examples if example.get("target_label") == label]
+        if not examples:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No accepted examples are available for {label.replace('_', ' ').title()}.",
+            )
+
     example = random.choice(examples)
     return {
         "example": example,
         "accepted_example_count": len(examples),
+        "selected_label": label,
     }
 
 
 @app.post("/api/chat/respond")
 def chat_respond(request: ChatRequest):
-    """Generate one assistant response using the same GroqChat wrapper."""
-    llm = _get_llm()
+    """Generate one concise assistant response using local Ollama."""
+    llm = _get_chat_llm()
     messages = [
         {"role": message.role, "content": message.content}
         for message in request.messages
@@ -312,7 +344,7 @@ def simulate_demo(request: DemoSimulationRequest):
     if not isinstance(feedback, str) or not feedback.strip():
         raise HTTPException(status_code=422, detail="Invalid user feedback.")
 
-    llm = _get_llm()
+    llm = _get_chat_llm()
     messages = [{"role": "user", "content": question}]
 
     try:
